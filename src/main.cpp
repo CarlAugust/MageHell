@@ -1,17 +1,23 @@
-#include <iostream>
 #include <stdint.h>
 #include <raylib.h>
 
-typedef int32_t i32;
+#include <iostream>
+#include <array>
 
-const Vector2 BasePlayerSize = { 16.0f, 32.0f };
+typedef int32_t i32;
+typedef uint8_t u8;
+
+const Vector2 BasePlayerSize = { 8.0f, 16.0f };
+const float TileSize = 8.0f;
+
+std::array<std::array<u8, 256>, 256> map; 
 
 struct Player {
     Vector2 position = { 0.0f, 0.0f };
     Vector2 size = BasePlayerSize;
     i32 hp = 0;
-    float hitboxRadius = 8.0f;
-    float speed = 250;
+    float hitboxRadius = 4.0f;
+    float speed = 75;
 };
 
 void DrawCircleVInsideRectangle(Vector2 position, Vector2 rectangleSize, float circleRadius, Color color) {
@@ -32,10 +38,17 @@ int main(void) {
     Player player;
     Texture2D playerTex = LoadTexture("assets/redmage_forward.png");
 
+    Texture2D stone1_floortileTex = LoadTexture("assets/stone1_floortile.png");
+    for (auto &row : map) {
+        for (auto &tile : row) {
+            tile = 1;
+        }
+    }
+
     Camera2D camera = {};
     camera.offset = {(screenWidth - player.size.x) / 2, (screenHeight - player.size.y) / 2};
     camera.rotation = 0.0f;
-    camera.zoom = 2.0f;
+    camera.zoom = 4.0f;
 
     while (!WindowShouldClose()) {
 
@@ -60,9 +73,20 @@ int main(void) {
         
         BeginMode2D(camera);
 
+            float y = 0;
+            for (auto &row : map) {
+                float x = 0;
+
+                for (auto &tile : row) {
+                    DrawTextureEx(stone1_floortileTex, {x, y}, 0.0f, 1.0f, WHITE);
+                    
+                    x += TileSize;
+                }
+                y += TileSize;
+            }
+
             DrawRectangle(0.0f, 0.0f, 20, 20, BLUE);
-            DrawTextureEx(playerTex, player.position, 0.0f, 2.0f, WHITE);
-            DrawCircleVInsideRectangle(player.position, player.size, player.hitboxRadius / 2, {122, 122, 0, 255});
+            DrawTextureEx(playerTex, player.position, 0.0f, 1.0f, WHITE);
             
 
         EndMode2D();
