@@ -14,6 +14,7 @@ std::array<std::array<u8, 256>, 256> map;
 
 struct Player {
     Vector2 position = { 0.0f, 0.0f };
+    Vector2 prevPosition = position;
     Vector2 size = BasePlayerSize;
     i32 hp = 0;
     float hitboxRadius = 4.0f;
@@ -27,6 +28,14 @@ void DrawCircleVInsideRectangle(Vector2 position, Vector2 rectangleSize, float c
     DrawCircleV(circlePosition, circleRadius, color);
 }
 
+float GetPlayerDirection(Player &player) {
+    float x = player.position.x - player.prevPosition.x;
+    if (x < 0.0f) return 1.0f;
+    else if (x > 0.0f) return -1.0f;
+
+    return 0.0f;
+}
+
 
 int main(void) {
     const i32 screenWidth = 1280;
@@ -37,6 +46,7 @@ int main(void) {
 
     Player player;
     Texture2D playerTex = LoadTexture("assets/redmage_forward.png");
+    Rectangle playerTexRectangle = {0.0f, 0.0f, playerTex.width, playerTex.height};
 
     Texture2D stone1_floortileTex = LoadTexture("assets/stone1_floortile.png");
     for (auto &row : map) {
@@ -48,7 +58,7 @@ int main(void) {
     Camera2D camera = {};
     camera.offset = {(screenWidth - player.size.x) / 2, (screenHeight - player.size.y) / 2};
     camera.rotation = 0.0f;
-    camera.zoom = 4.0f;
+    camera.zoom = 6.0f;
 
     while (!WindowShouldClose()) {
 
@@ -86,11 +96,21 @@ int main(void) {
             }
 
             DrawRectangle(0.0f, 0.0f, 20, 20, BLUE);
-            DrawTextureEx(playerTex, player.position, 0.0f, 1.0f, WHITE);
-            
+
+            Rectangle Destination = {player.position.x, player.position.y, player.size.x, player.size.y};
+
+            float playerDirection = GetPlayerDirection(player);
+            if (playerDirection != 0.0f) {
+                playerTexRectangle.width = std::abs(playerTexRectangle.width) * playerDirection;
+            }
+
+            DrawTexturePro(playerTex, playerTexRectangle, Destination, { 0.0f, 0.0f }, 0.0f, WHITE);
 
         EndMode2D();
         EndDrawing();
+
+        // End of frame updates
+        player.prevPosition = player.position;
     }
 
     CloseWindow();
