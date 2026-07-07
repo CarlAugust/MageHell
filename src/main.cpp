@@ -1,11 +1,10 @@
 #include <stdint.h>
 #include <raylib.h>
+#include <assert.h>
+#include <common.h>
 
 #include <iostream>
 #include <array>
-
-typedef int32_t i32;
-typedef uint8_t u8;
 
 const Vector2 BasePlayerSize = { 8.0f, 16.0f };
 const float TileSize = 8.0f;
