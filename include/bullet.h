@@ -5,6 +5,7 @@
 
 struct Bullet {
     bool active = false;
+    Vector2 lastPosition = { 0.0f, 0.0f };
     Vector2 position = { 0.0f, 0.0f };
     float speed = 0.0f;
     float timeAlive = 0.0f;
@@ -20,3 +21,4 @@ struct BulletMetaData {
 const BulletMetaData& GetBulletMetaData(u64 bulletId);
 void SpawnBullet(Vector2 position, u64 bulletId);
 u64 RegisterBullet(BulletMetaData RegisteredBulletData);
+void UpdatePositionsAndDrawBullets();

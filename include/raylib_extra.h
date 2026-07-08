@@ -8,3 +8,4 @@
 #include <raylib.h>
 
 Texture2D LoadTextureSafe(const char* filePath);
+void DrawCircleVInsideRectangle(Vector2 position, Vector2 rectangleSize, float circleRadius, Color color);

@@ -2,6 +2,7 @@
 #include <common.h>
 #include <bullet.h>
 #include <assert.h>
+#include <stdio.h>
 
 #include <array>
 #include <vector>
@@ -48,23 +49,27 @@ void SpawnBullet(Vector2 position, u64 bulletId) {
 
     // TODO: How should these be defined?
     bullet.speed = 20.0f;
-    bullet.timeCap = 5.0f;
+    bullet.timeCap = 50000.0f;
+
+    G_BulletBuffer.curr++;
+    if (G_BulletBuffer.curr == G_BulletBuffer.cap) G_BulletBuffer.curr = 0;
 };
 
 void UpdatePositionsAndDrawBullets() {
     float dt = GetFrameTime();
     for (Bullet &b : G_BulletBuffer.buffer) {
-        if (!b.active) continue;
-
+        if (!b.active) continue;        
+        
         b.timeAlive += dt;
         if (b.timeAlive >= b.timeCap) {
             b.active = false;
             continue;
         }
 
-        BulletMetaData BulletMetaData = GetBulletMetaData(b.bulletId);
-        BulletMetaData.update(b);
-        DrawTextureV(BulletMetaData.texture, b.position, WHITE);
 
+        BulletMetaData bulletMetaData = GetBulletMetaData(b.bulletId);
+        bulletMetaData.update(b);
+
+        DrawTextureEx(bulletMetaData.texture, b.position, 0.0f, 1.0f, WHITE);
     }
 }

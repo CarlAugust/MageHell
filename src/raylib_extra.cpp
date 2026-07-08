@@ -15,3 +15,10 @@ Texture2D LoadTextureSafe(const char* filePath) {
     }
     return tex;
 }
+
+void DrawCircleVInsideRectangle(Vector2 position, Vector2 rectangleSize, float circleRadius, Color color) {
+    Vector2 circlePosition = position;
+    circlePosition.x += rectangleSize.x / 2;
+    circlePosition.y += rectangleSize.y / 2;
+    DrawCircleV(circlePosition, circleRadius, color);
+}
