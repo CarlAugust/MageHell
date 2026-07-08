@@ -9,9 +9,14 @@ struct Bullet {
     float speed = 0.0f;
     float timeAlive = 0.0f;
     float timeCap = 0.0f;
+    u64 bulletId = 0;
 };
 
 struct BulletMetaData {
     Texture2D texture = {};
     void(*update)(Bullet&) = nullptr;
 };
+
+const BulletMetaData& GetBulletMetaData(u64 bulletId);
+void SpawnBullet(Vector2 position, u64 bulletId);
+u64 RegisterBullet(BulletMetaData RegisteredBulletData);
