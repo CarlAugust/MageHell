@@ -75,8 +75,8 @@ void HandlePlayerInput(Player &player) {
 
 
 int main(void) {
-    const i32 screenWidth = 1920;
-    const i32 screenHeight = 1080;
+    const i32 screenWidth = 1280;
+    const i32 screenHeight = 720;
 
     InitWindow(screenWidth, screenHeight, "MageHell dogde the bullets pew pew");
     SetTargetFPS(165);
@@ -105,21 +105,21 @@ int main(void) {
     u64 redBulletId = RegisterBullet(redBulletMetaData);
 
     float timeInterval = 0.0f;
+
     while (!WindowShouldClose()) {
+
         float dt = GetFrameTime();
         HandlePlayerInput(player);
         camera.target = player.position;
 
         timeInterval += dt;
-        if (timeInterval > 0.1f) {
-            for (float x = -1.0f; x <= 1.0f; x += 1.0f) {
-                for (i32 y = -1.0f; y <= 1.0f; y += 1.0f) {
-                    if (x == 0.0f && y == 0.0f) continue;
-                    SpawnBullet({x * 20.0f, y * 20.0f}, redBulletId);
-                }
+        for (float x = -1.0f; x <= 1.0f; x += 1.0f) {
+            for (float y = -1.0f; y <= 1.0f; y += 1.0f) {
+                if (x == 0.0f && y == 0.0f) continue;
+                SpawnBullet({x * 20.0f, y * 20.0f}, redBulletId);
             }
-            timeInterval = 0.0f;
         }
+            timeInterval = 0.0f;
 
         BeginDrawing();
             ClearBackground(BLACK);

@@ -42,6 +42,7 @@ namespace {
 void SpawnBullet(Vector2 position, u64 bulletId) {
     u64 curr = G_BulletBuffer.curr;
     Bullet &bullet = G_BulletBuffer.buffer[curr];
+    bullet = {0};
 
     bullet.active = true;
     bullet.position = position;
