@@ -9,9 +9,6 @@
 #include <iostream>
 #include <array>
 
-const Vector2 BasePlayerSize = { 8.0f, 16.0f };
-const float TileSize = 8.0f;
-
 Texture2D stone1_floortileTex;
 
 std::array<std::array<u8, 256>, 256> map; 
@@ -38,17 +35,7 @@ void FillMap() {
     }
 }
 
-struct Player {
-    Texture2D texture;
-    Vector2 position = { 0.0f, 0.0f };
-    Vector2 prevPosition = position;
-    Vector2 size = BasePlayerSize;
-    i32 hp = 0;
-    float hitboxRadius = 2.0f;
-    float speed = 75;
-};
-
-float GetPlayerDirection(Player &player) {
+float GetPlayerHorizontalDirection(Player &player) {
     float x = player.position.x - player.prevPosition.x;
     if (x < 0.0f) return 1.0f;
     else if (x > 0.0f) return -1.0f;
@@ -73,6 +60,10 @@ void HandlePlayerInput(Player &player) {
     }
 }
 
+PublicGameData& GetPublicGameData() {
+    static PublicGameData instance;
+    return instance;
+}
 
 int main(void) {
     const i32 screenWidth = 1280;
@@ -81,14 +72,21 @@ int main(void) {
     InitWindow(screenWidth, screenHeight, "MageHell dogde the bullets pew pew");
     SetTargetFPS(165);
 
-    Player player;
+    // Initilize game data ==================
+    PublicGameData& gameData = GetPublicGameData();
+    gameData = {0};
+
+    Player& player = gameData.player;
     player.texture = LoadTexture("assets/redmage_forward.png");
     stone1_floortileTex = LoadTexture("assets/stone1_floortile.png");
 
-    Camera2D camera = {};
+    Camera2D& camera = gameData.camera;
     camera.offset = {(screenWidth - player.size.x) / 2, (screenHeight - player.size.y) / 2};
     camera.rotation = 0.0f;
     camera.zoom = 6.0f;
+
+    // End of gamedata initilization ===================================
+
 
     BulletMetaData redBulletMetaData = {};
     redBulletMetaData.texture = LoadTextureSafe("assets/red_bullet.png");
@@ -119,7 +117,7 @@ int main(void) {
                 SpawnBullet({x * 20.0f, y * 20.0f}, redBulletId);
             }
         }
-            timeInterval = 0.0f;
+        timeInterval = 0.0f;
 
         BeginDrawing();
             ClearBackground(BLACK);
@@ -130,7 +128,7 @@ int main(void) {
             Rectangle Destination = {player.position.x, player.position.y, player.size.x, player.size.y};
 
             Rectangle playerTexRectangle = {0.0f, 0.0f, player.texture.width, player.texture.height};
-            float playerDirection = GetPlayerDirection(player);
+            float playerDirection = GetPlayerHorizontalDirection(player);
             if (playerDirection != 0.0f) {
                 playerTexRectangle.width = std::abs(playerTexRectangle.width) * playerDirection;
             }
