@@ -8,4 +8,8 @@
 #include <raylib.h>
 
 Texture2D LoadTextureSafe(const char* filePath);
-void DrawCircleVInsideRectangle(Vector2 position, Vector2 rectangleSize, float circleRadius, Color color);
+
+/*
+    DrawTextureEx but it draws the texture with the position at the center
+*/
+void DrawTextureCenterEx(Texture2D texture, Vector2 position, float rotation, float scale, Color tint);

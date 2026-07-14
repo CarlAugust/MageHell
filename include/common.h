@@ -20,6 +20,7 @@ struct Player {
     Vector2 position = { 0.0f, 0.0f };
     Vector2 prevPosition = position;
     Vector2 size = BasePlayerSize;
+    Vector2 hitboxPosition = {size.x / 2, size.y / 2};
     i32 hp = 0;
     float hitboxRadius = 2.0f;
     float speed = 75;

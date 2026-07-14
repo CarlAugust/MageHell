@@ -1,4 +1,6 @@
 #include <raylib.h>
+#include <raymath.h>
+#include <raylib_extra.h>
 #include <common.h>
 #include <bullet.h>
 #include <assert.h>
@@ -6,6 +8,7 @@
 
 #include <array>
 #include <vector>
+#include <iostream>
 
 namespace {
     struct BulletMetaDataRegistry {
@@ -58,19 +61,37 @@ void SpawnBullet(Vector2 position, u64 bulletId) {
 
 void UpdatePositionsAndDrawBullets() {
     float dt = GetFrameTime();
-    for (Bullet &b : G_BulletBuffer.buffer) {
-        if (!b.active) continue;        
+    PublicGameData& gameData = GetPublicGameData();
+    Player& player = gameData.player;
+
+    for (Bullet &bullet : G_BulletBuffer.buffer) {
+        if (!bullet.active) continue;        
         
-        b.timeAlive += dt;
-        if (b.timeAlive >= b.timeCap) {
-            b.active = false;
+        bullet.timeAlive += dt;
+        if (bullet.timeAlive >= bullet.timeCap) {
+            bullet.active = false;
             continue;
         }
 
 
-        BulletMetaData bulletMetaData = GetBulletMetaData(b.bulletId);
-        bulletMetaData.update(b);
+        BulletMetaData bulletMetaData = GetBulletMetaData(bullet.bulletId);
+        bulletMetaData.update(bullet);
 
-        DrawTextureEx(bulletMetaData.texture, b.position, 0.0f, 1.0f, WHITE);
+        bool collision = CheckCollisionCircles(
+            Vector2Add(player.position, player.hitboxPosition),
+            player.hitboxRadius, 
+            bullet.position, 
+            bulletMetaData.hitboxRadius
+        );
+
+        if (collision) {
+            // TODO: Take player damage or something
+            // Remove under when an actual function is created
+            static u64 hitCount = 0;
+            hitCount++;
+            std::cout << "Player got hit: " << hitCount << "\n";
+        }
+
+        DrawTextureCenterEx(bulletMetaData.texture, bullet.position, 0.0f, 1.0f, WHITE);
     }
 }

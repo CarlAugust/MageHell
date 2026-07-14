@@ -1,4 +1,6 @@
 #include <raylib_extra.h>
+#include <raylib.h>
+#include <raymath.h>
 
 Texture2D getErrorTexture() {
     Image img = GenImageChecked(16, 16, 4, 4, PURPLE, BLACK);
@@ -16,9 +18,8 @@ Texture2D LoadTextureSafe(const char* filePath) {
     return tex;
 }
 
-void DrawCircleVInsideRectangle(Vector2 position, Vector2 rectangleSize, float circleRadius, Color color) {
-    Vector2 circlePosition = position;
-    circlePosition.x += rectangleSize.x / 2;
-    circlePosition.y += rectangleSize.y / 2;
-    DrawCircleV(circlePosition, circleRadius, color);
+void DrawTextureCenterEx(Texture2D texture, Vector2 position, float rotation, float scale, Color tint) {
+    position.x -= texture.width / 2;
+    position.y -= texture.height / 2;
+    DrawTextureEx(texture, position, rotation, scale, tint);
 }

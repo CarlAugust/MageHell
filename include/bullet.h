@@ -14,6 +14,7 @@ struct Bullet {
 };
 
 struct BulletMetaData {
+    float hitboxRadius = 0.0f;
     Texture2D texture = {};
     void(*update)(Bullet&) = nullptr;
 };

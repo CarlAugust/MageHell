@@ -100,6 +100,8 @@ int main(void) {
         bullet.position.x += direction.x * bullet.speed * dt;
         bullet.position.y += direction.y * bullet.speed * dt;
     };
+    redBulletMetaData.hitboxRadius = 1.0f;
+
     u64 redBulletId = RegisterBullet(redBulletMetaData);
 
     float timeInterval = 0.0f;
@@ -134,7 +136,7 @@ int main(void) {
             }
 
             DrawTexturePro(player.texture, playerTexRectangle, Destination, { 0.0f, 0.0f }, 0.0f, WHITE);
-            DrawCircleVInsideRectangle(player.position, player.size, player.hitboxRadius, {255, 0, 0, 128});
+            DrawCircleV(Vector2Add(player.position, player.hitboxPosition), player.hitboxRadius, {255, 0, 0, 128});
             DrawTextureEx(redBulletMetaData.texture, {0.0f, 0.0f}, 0.0f, 1.0f, WHITE);
 
             UpdatePositionsAndDrawBullets();
