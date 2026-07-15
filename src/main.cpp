@@ -5,6 +5,7 @@
 #include <assert.h>
 #include <common.h>
 #include <bullet.h>
+#include <enemy.h>
 
 #include <iostream>
 #include <array>
@@ -77,8 +78,8 @@ int main(void) {
     gameData = {0};
 
     Player& player = gameData.player;
-    player.texture = LoadTexture("assets/redmage_forward.png");
-    stone1_floortileTex = LoadTexture("assets/stone1_floortile.png");
+    player.texture = LoadTexture("assets/entities/redmage.png");
+    stone1_floortileTex = LoadTexture("assets/tiles/stone1.png");
 
     Camera2D& camera = gameData.camera;
     camera.offset = {(screenWidth - player.size.x) / 2, (screenHeight - player.size.y) / 2};
@@ -87,9 +88,9 @@ int main(void) {
 
     // End of gamedata initilization ===================================
 
-
+    // Register Red bullet..... TODO: Move to another file
     BulletMetaData redBulletMetaData = {};
-    redBulletMetaData.texture = LoadTextureSafe("assets/bullets/.png");
+    redBulletMetaData.texture = LoadTextureSafe("assets/bullets/basicred.png");
     redBulletMetaData.update = [](Bullet &bullet) {
         float dt = GetFrameTime();
         Vector2 direction = Vector2Subtract(bullet.position, bullet.lastPosition);
@@ -101,10 +102,24 @@ int main(void) {
         bullet.position.y += direction.y * bullet.speed * dt;
     };
     redBulletMetaData.hitboxRadius = 1.0f;
-
     u64 redBulletId = RegisterBullet(redBulletMetaData);
+    // .................................
+
+    // Register Red mageling..... TODO: Move to another file
+
+    EnemyMetaData redMagelingMetaData = {};
+    redMagelingMetaData.texture = LoadTextureSafe("assets/entities/redmageling.png");
+    redMagelingMetaData.update = [](Enemy &enemy) {
+
+    };
+    redMagelingMetaData.hitboxRadius = 3.0f;
+
+    u64 redMagelingId = RegisterEnemy(redMagelingMetaData);
+    // .................................
+
 
     float timeInterval = 0.0f;
+    SpawnEnemy({0.0f, 0.0f}, redMagelingId);
 
     while (!WindowShouldClose()) {
 
@@ -138,7 +153,8 @@ int main(void) {
             DrawTexturePro(player.texture, playerTexRectangle, Destination, { 0.0f, 0.0f }, 0.0f, WHITE);
             DrawCircleV(Vector2Add(player.position, player.hitboxPosition), player.hitboxRadius, {255, 0, 0, 128});
 
-            UpdatePositionsAndDrawBullets();
+            UpdateStateAndDrawBullets();
+            UpdateStateAndDrawEnemies();
 
         EndMode2D();
         EndDrawing();

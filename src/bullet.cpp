@@ -59,7 +59,7 @@ void SpawnBullet(Vector2 position, u64 bulletId) {
     if (G_BulletBuffer.curr == G_BulletBuffer.cap) G_BulletBuffer.curr = 0;
 };
 
-void UpdatePositionsAndDrawBullets() {
+void UpdateStateAndDrawBullets() {
     float dt = GetFrameTime();
     PublicGameData& gameData = GetPublicGameData();
     Player& player = gameData.player;
@@ -74,7 +74,7 @@ void UpdatePositionsAndDrawBullets() {
         }
 
 
-        BulletMetaData bulletMetaData = GetBulletMetaData(bullet.bulletId);
+        const BulletMetaData &bulletMetaData = GetBulletMetaData(bullet.bulletId);
         bulletMetaData.update(bullet);
 
         bool collision = CheckCollisionCircles(
@@ -87,7 +87,7 @@ void UpdatePositionsAndDrawBullets() {
         if (collision) {
             // TODO: Take player damage or something
             // Remove under when an actual function is created
-            
+
         }
 
         DrawTextureCenterEx(bulletMetaData.texture, bullet.position, 0.0f, 1.0f, WHITE);

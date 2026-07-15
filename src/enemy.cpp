@@ -46,3 +46,11 @@ void SpawnEnemy(Vector2 position, u64 enemyId) {
     G_EnemyBuffer.curr++;
     if (G_EnemyBuffer.curr == G_EnemyBuffer.cap) G_EnemyBuffer.curr = 0;
 };
+
+void UpdateStateAndDrawEnemies() {
+    
+    for (Enemy &enemy : G_EnemyBuffer.buffer) {
+        const EnemyMetaData &enemyMetaData = GetEnemyMetaData(enemy.id);
+        DrawTextureEx(enemyMetaData.texture, enemy.position, 0.0f, 1.0f, WHITE);
+    }
+}

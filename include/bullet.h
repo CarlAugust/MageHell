@@ -23,4 +23,4 @@ struct BulletMetaData {
 const BulletMetaData& GetBulletMetaData(u64 bulletId);
 void SpawnBullet(Vector2 position, u64 bulletId);
 u64 RegisterBullet(BulletMetaData RegisteredBulletData);
-void UpdatePositionsAndDrawBullets();
+void UpdateStateAndDrawBullets();
