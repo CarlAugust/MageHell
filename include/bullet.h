@@ -4,13 +4,14 @@
 #include <common.h>
 
 struct Bullet {
-    bool active = false;
     Vector2 lastPosition = { 0.0f, 0.0f };
     Vector2 position = { 0.0f, 0.0f };
+    u64 bulletId = 0;
     float speed = 0.0f;
     float timeAlive = 0.0f;
     float timeCap = 0.0f;
-    u64 bulletId = 0;
+    bool isFriendly = false;
+    bool active = false;
 };
 
 struct BulletMetaData {

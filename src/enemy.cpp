@@ -36,3 +36,13 @@ namespace {
 
     EnemyBuffer G_EnemyBuffer = {};
 }
+
+void SpawnEnemy(Vector2 position, u64 enemyId) {
+    u64 curr = G_EnemyBuffer.curr;
+    Enemy &enemy = G_EnemyBuffer.buffer[curr];
+    enemy = {0};
+    enemy.alive = true;
+
+    G_EnemyBuffer.curr++;
+    if (G_EnemyBuffer.curr == G_EnemyBuffer.cap) G_EnemyBuffer.curr = 0;
+};

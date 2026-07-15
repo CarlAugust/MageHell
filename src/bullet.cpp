@@ -87,9 +87,7 @@ void UpdatePositionsAndDrawBullets() {
         if (collision) {
             // TODO: Take player damage or something
             // Remove under when an actual function is created
-            static u64 hitCount = 0;
-            hitCount++;
-            std::cout << "Player got hit: " << hitCount << "\n";
+            
         }
 
         DrawTextureCenterEx(bulletMetaData.texture, bullet.position, 0.0f, 1.0f, WHITE);

@@ -5,6 +5,7 @@
 */
 
 #include <stdint.h>
+#include <raylib.h>
 
 typedef int32_t i32;
 typedef size_t u64;
