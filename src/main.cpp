@@ -89,7 +89,7 @@ int main(void) {
 
 
     BulletMetaData redBulletMetaData = {};
-    redBulletMetaData.texture = LoadTextureSafe("assets/red_bullet.png");
+    redBulletMetaData.texture = LoadTextureSafe("assets/bullets/.png");
     redBulletMetaData.update = [](Bullet &bullet) {
         float dt = GetFrameTime();
         Vector2 direction = Vector2Subtract(bullet.position, bullet.lastPosition);
@@ -137,7 +137,6 @@ int main(void) {
 
             DrawTexturePro(player.texture, playerTexRectangle, Destination, { 0.0f, 0.0f }, 0.0f, WHITE);
             DrawCircleV(Vector2Add(player.position, player.hitboxPosition), player.hitboxRadius, {255, 0, 0, 128});
-            DrawTextureEx(redBulletMetaData.texture, {0.0f, 0.0f}, 0.0f, 1.0f, WHITE);
 
             UpdatePositionsAndDrawBullets();
 
