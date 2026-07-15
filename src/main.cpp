@@ -61,6 +61,20 @@ void HandlePlayerInput(Player &player) {
     }
 }
 
+void DrawPlayer(Player &player) {
+    // Actual player texture drawn
+    Rectangle Destination = {player.position.x, player.position.y, player.size.x, player.size.y};
+    Rectangle playerTexRectangle = {0.0f, 0.0f, player.texture.width, player.texture.height};
+    float playerDirection = GetPlayerHorizontalDirection(player);
+    if (playerDirection != 0.0f) {
+        playerTexRectangle.width = std::abs(playerTexRectangle.width) * playerDirection;
+    }
+    DrawTexturePro(player.texture, playerTexRectangle, Destination, { 0.0f, 0.0f }, 0.0f, WHITE);
+
+    // Player hitbox draw
+    DrawCircleV(Vector2Add(player.position, player.hitboxPosition), player.hitboxRadius, {255, 0, 0, 128});
+}
+
 PublicGameData& GetPublicGameData() {
     static PublicGameData instance;
     return instance;
@@ -78,8 +92,7 @@ int main(void) {
     gameData = {0};
 
     Player& player = gameData.player;
-    player.texture = LoadTexture("assets/entities/redmage.png");
-    stone1_floortileTex = LoadTexture("assets/tiles/stone1.png");
+    player.texture = LoadTextureSafe("assets/entities/redmage.png");
 
     Camera2D& camera = gameData.camera;
     camera.offset = {(screenWidth - player.size.x) / 2, (screenHeight - player.size.y) / 2};
@@ -102,7 +115,7 @@ int main(void) {
         bullet.position.y += direction.y * bullet.speed * dt;
     };
     redBulletMetaData.hitboxRadius = 1.0f;
-    u64 redBulletId = RegisterBullet(redBulletMetaData);
+    const u64 redBulletId = RegisterBullet(redBulletMetaData);
     // .................................
 
     // Register Red mageling..... TODO: Move to another file
@@ -110,11 +123,11 @@ int main(void) {
     EnemyMetaData redMagelingMetaData = {};
     redMagelingMetaData.texture = LoadTextureSafe("assets/entities/redmageling.png");
     redMagelingMetaData.update = [](Enemy &enemy) {
-
+        
     };
     redMagelingMetaData.hitboxRadius = 3.0f;
 
-    u64 redMagelingId = RegisterEnemy(redMagelingMetaData);
+    const u64 redMagelingId = RegisterEnemy(redMagelingMetaData);
     // .................................
 
 
@@ -127,31 +140,13 @@ int main(void) {
         HandlePlayerInput(player);
         camera.target = player.position;
 
-        timeInterval += dt;
-        for (float x = -1.0f; x <= 1.0f; x += 1.0f) {
-            for (float y = -1.0f; y <= 1.0f; y += 1.0f) {
-                if (x == 0.0f && y == 0.0f) continue;
-                SpawnBullet({x * 20.0f, y * 20.0f}, redBulletId);
-            }
-        }
-        timeInterval = 0.0f;
-
         BeginDrawing();
             ClearBackground(BLACK);
             DrawFPS(10, 10);
         
         BeginMode2D(camera);
 
-            Rectangle Destination = {player.position.x, player.position.y, player.size.x, player.size.y};
-
-            Rectangle playerTexRectangle = {0.0f, 0.0f, player.texture.width, player.texture.height};
-            float playerDirection = GetPlayerHorizontalDirection(player);
-            if (playerDirection != 0.0f) {
-                playerTexRectangle.width = std::abs(playerTexRectangle.width) * playerDirection;
-            }
-
-            DrawTexturePro(player.texture, playerTexRectangle, Destination, { 0.0f, 0.0f }, 0.0f, WHITE);
-            DrawCircleV(Vector2Add(player.position, player.hitboxPosition), player.hitboxRadius, {255, 0, 0, 128});
+            DrawPlayer(player);
 
             UpdateStateAndDrawBullets();
             UpdateStateAndDrawEnemies();

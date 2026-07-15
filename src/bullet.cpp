@@ -18,7 +18,7 @@ namespace {
     BulletMetaDataRegistry G_BulletMetaDataRegistry{};
 }
 
-u64 RegisterBullet(BulletMetaData RegisteredBulletData) {
+u64 RegisterBullet(BulletMetaData &RegisteredBulletData) {
     G_BulletMetaDataRegistry.registry.push_back(RegisteredBulletData);
     return G_BulletMetaDataRegistry.registry.size() - 1;
 }

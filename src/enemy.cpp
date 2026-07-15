@@ -13,7 +13,7 @@ namespace {
     EnemyMetaDataRegistry G_EnemyMetaDataRegistry{};
 }
 
-u64 RegisterEnemy(EnemyMetaData RegisteredEnemyData) {
+u64 RegisterEnemy(EnemyMetaData &RegisteredEnemyData) {
     G_EnemyMetaDataRegistry.registry.push_back(RegisteredEnemyData);
     return G_EnemyMetaDataRegistry.registry.size() - 1;
 }

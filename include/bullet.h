@@ -2,6 +2,7 @@
 
 #include <raylib.h>
 #include <common.h>
+#include <functional>
 
 struct Bullet {
     Vector2 lastPosition = { 0.0f, 0.0f };
@@ -17,10 +18,10 @@ struct Bullet {
 struct BulletMetaData {
     float hitboxRadius = 0.0f;
     Texture2D texture = {};
-    void(*update)(Bullet&) = nullptr;
+    std::function<void(Bullet&)> update = nullptr;
 };
 
 const BulletMetaData& GetBulletMetaData(u64 bulletId);
 void SpawnBullet(Vector2 position, u64 bulletId);
-u64 RegisterBullet(BulletMetaData RegisteredBulletData);
+u64 RegisterBullet(BulletMetaData &RegisteredBulletData);
 void UpdateStateAndDrawBullets();
