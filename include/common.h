@@ -40,7 +40,13 @@ struct Timer {
         target = seconds;
     }
 
+    /*
+        Elapses adds time and calculates how many times the target has been reached
+        Elapses function must be called every frame, its the natural way its done at least 
+    */
     u64 elapses() {
+        float dt = GetFrameTime();
+        time += dt;
         u64 elapse_count = static_cast<u64>(time / target);
         time = std::fmod(time, target);
         return elapse_count;

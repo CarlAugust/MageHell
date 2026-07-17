@@ -125,10 +125,7 @@ int main(void) {
     redMagelingMetaData.texture = LoadTextureSafe("assets/entities/redmageling.png");
     redMagelingMetaData.update = [redBulletId](Enemy &enemy) {
         // TODO: Is there a less wasteful way to set timers?
-        enemy.timer.set(1.0f);
-
-        float dt = GetFrameTime();
-        enemy.timer.add(dt);
+        enemy.timer.set(0.5f);
 
         if (enemy.timer.elapses() > 0) {
             for (float i = -1.0f; i <= 1.0f; i += 2.0f) {

@@ -6,7 +6,7 @@ just a project to learn and program
 
 Im going to try to fill in all these points in 7/21/2026
 
-- Enemy system similar to the current bullet system with a looping buffer and MetaDataRegistry
++ Enemy system similar to the current bullet system with a looping buffer and MetaDataRegistry
 
 - Some way to kill these enemies using perhaps friendly bullets of sorts
 im thinking a simple point and click that sends bullets, i also need to put in the metadata
