@@ -34,7 +34,7 @@ const BulletMetaData& GetBulletMetaData(u64 bulletId) {
 namespace {
     constexpr u64 BULLET_CAP = 2048;
     struct BulletBuffer {
-        u64 curr = 0;
+        u64 curr = 1;
         u64 cap = BULLET_CAP;
         std::array<Bullet, BULLET_CAP> buffer;
     };
@@ -45,18 +45,18 @@ namespace {
 void SpawnBullet(Vector2 position, u64 bulletId) {
     u64 curr = G_BulletBuffer.curr;
     Bullet &bullet = G_BulletBuffer.buffer[curr];
-    bullet = {0};
+    bullet = Bullet{};
 
     bullet.active = true;
     bullet.position = position;
-    bullet.bulletId = bulletId;
+    bullet.id = bulletId;
 
     // TODO: How should these be defined?
     bullet.speed = 20.0f;
     bullet.timeCap = 50000.0f;
 
     G_BulletBuffer.curr++;
-    if (G_BulletBuffer.curr == G_BulletBuffer.cap) G_BulletBuffer.curr = 0;
+    if (G_BulletBuffer.curr == G_BulletBuffer.cap) G_BulletBuffer.curr = 1;
 };
 
 void UpdateStateAndDrawBullets() {
@@ -74,7 +74,8 @@ void UpdateStateAndDrawBullets() {
         }
 
 
-        const BulletMetaData &bulletMetaData = GetBulletMetaData(bullet.bulletId);
+        const BulletMetaData &bulletMetaData = GetBulletMetaData(bullet.id);
+        assert(bulletMetaData.update != nullptr);
         bulletMetaData.update(bullet);
 
         bool collision = CheckCollisionCircles(

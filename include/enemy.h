@@ -6,7 +6,8 @@
 
 struct Enemy {
     Vector2 position;
-    u64 id;
+    u64 id = 0;
+    float timeAlive = 0.0f;
     bool alive;
 };
 

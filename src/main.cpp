@@ -105,6 +105,7 @@ int main(void) {
     BulletMetaData redBulletMetaData = {};
     redBulletMetaData.texture = LoadTextureSafe("assets/bullets/basicred.png");
     redBulletMetaData.update = [](Bullet &bullet) {
+
         float dt = GetFrameTime();
         Vector2 direction = Vector2Subtract(bullet.position, bullet.lastPosition);
         direction = Vector2Normalize(direction);
@@ -122,8 +123,19 @@ int main(void) {
 
     EnemyMetaData redMagelingMetaData = {};
     redMagelingMetaData.texture = LoadTextureSafe("assets/entities/redmageling.png");
-    redMagelingMetaData.update = [](Enemy &enemy) {
+    redMagelingMetaData.update = [redBulletId](Enemy &enemy) {
         
+        float dt = GetFrameTime();
+        enemy.timeAlive += dt;
+
+        if (enemy.timeAlive >= 0.5f) {
+            for (float i = -1.0f; i <= 1.0f; i += 2.0f) {
+                for (float j = -1.0f; j <= 1.0f; j += 2.0f) {
+                    SpawnBullet(Vector2Add(enemy.position, {i, j}), redBulletId);
+                }
+            }
+            enemy.timeAlive = 0.0f;
+        }
     };
     redMagelingMetaData.hitboxRadius = 3.0f;
 
