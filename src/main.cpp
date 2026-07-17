@@ -124,11 +124,13 @@ int main(void) {
     EnemyMetaData redMagelingMetaData = {};
     redMagelingMetaData.texture = LoadTextureSafe("assets/entities/redmageling.png");
     redMagelingMetaData.update = [redBulletId](Enemy &enemy) {
-        
-        float dt = GetFrameTime();
-        enemy.timeAlive += dt;
+        // TODO: Is there a less wasteful way to set timers?
+        enemy.timer.set(1.0f);
 
-        if (enemy.timeAlive >= 0.5f) {
+        float dt = GetFrameTime();
+        enemy.timer.add(dt);
+
+        if (enemy.timer.elapses() > 0) {
             for (float i = -1.0f; i <= 1.0f; i += 2.0f) {
                 for (float j = -1.0f; j <= 1.0f; j += 2.0f) {
                     SpawnBullet(Vector2Add(enemy.position, {i, j}), redBulletId);

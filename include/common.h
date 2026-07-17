@@ -6,6 +6,7 @@
 
 #include <stdint.h>
 #include <raylib.h>
+#include <cmath>
 
 typedef int32_t i32;
 typedef size_t u64;
@@ -25,6 +26,25 @@ struct Player {
     i32 hp = 0;
     float hitboxRadius = 2.0f;
     float speed = 75;
+};
+
+struct Timer {
+    float time = 0.0f;
+    float target = 1.0f;
+
+    void add(float seconds) { 
+        time += seconds;
+    }
+
+    void set(float seconds) {
+        target = seconds;
+    }
+
+    u64 elapses() {
+        u64 elapse_count = static_cast<u64>(time / target);
+        time = std::fmod(time, target);
+        return elapse_count;
+    }
 };
 
 /*
