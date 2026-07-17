@@ -75,6 +75,14 @@ void DrawPlayer(Player &player) {
     DrawCircleV(Vector2Add(player.position, player.hitboxPosition), player.hitboxRadius, {255, 0, 0, 128});
 }
 
+void CheckPlayerDead(Player &player) {
+    static bool hasDied = false;
+    if (player.hp <= 0 && !hasDied) {
+        std::cout << "Player dead\n";
+        hasDied = true;
+    }
+}
+
 PublicGameData& GetPublicGameData() {
     static PublicGameData instance;
     return instance;
@@ -89,7 +97,7 @@ int main(void) {
 
     // Initilize game data ==================
     PublicGameData& gameData = GetPublicGameData();
-    gameData = {0};
+    gameData = {};
 
     Player& player = gameData.player;
     player.texture = LoadTextureSafe("assets/entities/redmage.png");
@@ -148,6 +156,10 @@ int main(void) {
     while (!WindowShouldClose()) {
 
         float dt = GetFrameTime();
+
+        player.updateDamageState();
+        CheckPlayerDead(player);
+        
         HandlePlayerInput(player);
         camera.target = player.position;
 

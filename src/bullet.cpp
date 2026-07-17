@@ -86,9 +86,7 @@ void UpdateStateAndDrawBullets() {
         );
 
         if (collision) {
-            // TODO: Take player damage or something
-            // Remove under when an actual function is created
-
+            player.takeDamage();
         }
 
         DrawTextureCenterEx(bulletMetaData.texture, bullet.position, 0.0f, 1.0f, WHITE);
