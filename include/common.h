@@ -44,7 +44,7 @@ struct Timer {
 };
 
 const Vector2 BasePlayerSize = { 8.0f, 16.0f };
-const float TileSize = 8.0f;
+const float TileSize = 32.0f;
 
 struct Player {
     Texture2D texture;

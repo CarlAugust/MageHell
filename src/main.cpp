@@ -10,17 +10,16 @@
 #include <iostream>
 #include <array>
 
-Texture2D stone1_floortileTex;
-
 std::array<std::array<u8, 256>, 256> map; 
 
 void DrawMap() {
-    float y = 0;
+    static Texture2D granite1Tex = LoadTextureSafe("assets/tiles/granite1.png");
+    float y = map.size() / (-2.0f);
     for (auto &row : map) {
-        float x = 0;
+        float x = row.size() / (-2.0f);
 
         for (auto &tile : row) {
-            DrawTextureEx(stone1_floortileTex, {x, y}, 0.0f, 1.0f, WHITE);
+            DrawTextureEx(granite1Tex, {x, y}, 0.0f, 1.0f, WHITE);
                     
             x += TileSize;
         }
@@ -168,6 +167,7 @@ int main(void) {
             DrawFPS(10, 10);
         
         BeginMode2D(camera);
+            DrawMap();
 
             DrawPlayer(player);
 

@@ -12,7 +12,7 @@ Im going to try to fill in all these points in 7/21/2026
 im thinking a simple point and click that sends bullets, i also need to put in the metadata
 if they are friendly or enemy bullets
 
-- A health system, such that the player takes damages, becomes invunrable and dies
++ A health system, such that the player takes damages, becomes invunrable and dies
 
 - A map, a way to load and create maps ect... I will probobly go for a simple
 rectangular grid of sorts
