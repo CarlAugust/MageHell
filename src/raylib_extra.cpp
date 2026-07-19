@@ -2,6 +2,8 @@
 #include <raylib.h>
 #include <raymath.h>
 
+#include <iostream>
+
 Texture2D getErrorTexture() {
     Image img = GenImageChecked(16, 16, 4, 4, PURPLE, BLACK);
     Texture2D tex = LoadTextureFromImage(img);
@@ -22,4 +24,14 @@ void DrawTextureCenterEx(Texture2D texture, Vector2 position, float rotation, fl
     position.x -= texture.width / 2;
     position.y -= texture.height / 2;
     DrawTextureEx(texture, position, rotation, scale, tint);
+}
+
+DoubleVector2 GetCameraBounds(Camera2D camera) {
+    DoubleVector2 vec;
+    vec.x1 = camera.target.x - camera.offset.x / camera.zoom;
+    vec.x2 = camera.target.x + camera.offset.x / camera.zoom;
+    vec.y1 = camera.target.y - camera.offset.y / camera.zoom;
+    vec.y2 = camera.target.y + camera.offset.y / camera.zoom;
+
+    return vec;
 }

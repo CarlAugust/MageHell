@@ -10,20 +10,32 @@
 #include <iostream>
 #include <array>
 
-std::array<std::array<u8, 256>, 256> map; 
+PublicGameData& GetPublicGameData() {
+    static PublicGameData instance;
+    return instance;
+}
+
+std::array<std::array<u8, 16>, 16> map; 
 
 void DrawMap() {
     static Texture2D granite1Tex = LoadTextureSafe("assets/tiles/granite1.png");
-    float y = map.size() / (-2.0f);
+    const Camera2D &camera = GetPublicGameData().camera;
+    DoubleVector2 bounds = GetCameraBounds(camera);
+
+    float y = (map.size() / (-2.0f)) * TileSize - TileSize;
     for (auto &row : map) {
-        float x = row.size() / (-2.0f);
+        y += TileSize;
+        if (y < (bounds.y1 - TileSize)) continue;
+        if (y > (bounds.y2)) continue;
+
+        float x = (row.size() / (-2.0f)) * TileSize - TileSize;
 
         for (auto &tile : row) {
-            DrawTextureEx(granite1Tex, {x, y}, 0.0f, 1.0f, WHITE);
-                    
             x += TileSize;
+            if (x < bounds.x1 - TileSize) continue;
+            if (x > bounds.x2) continue;
+            DrawTextureEx(granite1Tex, {x, y}, 0.0f, 1.0f, WHITE);     
         }
-        y += TileSize;
     }
 }
 
@@ -80,11 +92,6 @@ void CheckPlayerDead(Player &player) {
         std::cout << "Player dead\n";
         hasDied = true;
     }
-}
-
-PublicGameData& GetPublicGameData() {
-    static PublicGameData instance;
-    return instance;
 }
 
 int main(void) {
@@ -164,7 +171,6 @@ int main(void) {
 
         BeginDrawing();
             ClearBackground(BLACK);
-            DrawFPS(10, 10);
         
         BeginMode2D(camera);
             DrawMap();
@@ -175,6 +181,8 @@ int main(void) {
             UpdateStateAndDrawEnemies();
 
         EndMode2D();
+
+            DrawFPS(10, 10);
         EndDrawing();
 
         // End of frame updates
