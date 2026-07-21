@@ -21,3 +21,4 @@ Texture2D LoadTextureSafe(const char* filePath);
 */
 void DrawTextureCenterEx(Texture2D texture, Vector2 position, float rotation, float scale, Color tint);
 DoubleVector2 GetCameraBounds(Camera2D camera);
+Vector2 GetMousePositionOnCamera(Camera2D camera);

@@ -158,13 +158,17 @@ int main(void) {
         }
     };
     redMagelingMetaData.hitboxRadius = 3.0f;
-
+    
     const u64 redMagelingId = RegisterEnemy(redMagelingMetaData);
     // .................................
 
 
     float timeInterval = 0.0f;
-    SpawnEnemy({0.0f, 0.0f}, redMagelingId);
+    Enemy enemyTemplate = {};
+    enemyTemplate.hp = 5.0f;
+    enemyTemplate.id = redMagelingId;
+
+    SpawnEnemy(enemyTemplate);
 
     while (!WindowShouldClose()) {
 
@@ -174,6 +178,24 @@ int main(void) {
         CheckPlayerDead(player);
         
         HandlePlayerInput(player);
+
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            Vector2 mousePosition = GetMousePositionOnCamera(camera); 
+
+            Bullet redBulletTemplate = {};
+            redBulletTemplate.id = redBulletId; 
+            redBulletTemplate.isFriendly = true;
+            redBulletTemplate.speed = 40.0f;
+            redBulletTemplate.timeCap = 50000.0f;
+            redBulletTemplate.lastPosition = player.position;
+
+            Vector2 offset = Vector2Subtract(mousePosition, player.position);
+            offset = Vector2Normalize(offset);
+            Vector2 position = Vector2Add(player.position, offset);
+            redBulletTemplate.position = position;
+            
+            SpawnBullet(redBulletTemplate);
+        }
         camera.target = player.position;
 
         BeginDrawing();
