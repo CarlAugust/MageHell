@@ -14,7 +14,7 @@ if they are friendly or enemy bullets
 
 + A health system, such that the player takes damages, becomes invunrable and dies
 
-- A map, a way to load and create maps ect... I will probobly go for a simple
++ A map, a way to load and create maps ect... I will probobly go for a simple
 rectangular grid of sorts
 
 - Game state . Menu/DeathScreen/Level ... ect controlled by a state machine
