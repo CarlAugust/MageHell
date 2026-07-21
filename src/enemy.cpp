@@ -48,6 +48,8 @@ void SpawnEnemy(Vector2 position, u64 enemyId) {
     if (G_EnemyBuffer.curr == G_EnemyBuffer.cap) G_EnemyBuffer.curr = 1;
 };
 
+
+
 void UpdateStateAndDrawEnemies() {
     
     for (Enemy &enemy : G_EnemyBuffer.buffer) {

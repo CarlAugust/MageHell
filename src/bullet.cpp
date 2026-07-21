@@ -42,22 +42,32 @@ namespace {
     BulletBuffer G_BulletBuffer = {};
 }
 
-void SpawnBullet(Vector2 position, u64 bulletId) {
+void SpawnBullet(const Bullet bulletTemplate) {
     u64 curr = G_BulletBuffer.curr;
     Bullet &bullet = G_BulletBuffer.buffer[curr];
-    bullet = Bullet{};
 
+    bullet = bulletTemplate;
     bullet.active = true;
-    bullet.position = position;
-    bullet.id = bulletId;
-
-    // TODO: How should these be defined?
-    bullet.speed = 20.0f;
-    bullet.timeCap = 50000.0f;
 
     G_BulletBuffer.curr++;
     if (G_BulletBuffer.curr == G_BulletBuffer.cap) G_BulletBuffer.curr = 1;
 };
+
+void EventPlayerBulletCollision(Player& player, Bullet& bullet, const BulletMetaData& bulletMetaData) {
+
+    bool collision = CheckCollisionCircles(
+        Vector2Add(player.position, player.hitboxPosition),
+        player.hitboxRadius, 
+        bullet.position, 
+        bulletMetaData.hitboxRadius
+    );
+
+    if (collision) {
+        if (!player.isDamaged) bullet.active = false;
+
+        player.takeDamage();
+    }
+}
 
 void UpdateStateAndDrawBullets() {
     float dt = GetFrameTime();
@@ -78,16 +88,14 @@ void UpdateStateAndDrawBullets() {
         assert(bulletMetaData.update != nullptr);
         bulletMetaData.update(bullet);
 
-        bool collision = CheckCollisionCircles(
-            Vector2Add(player.position, player.hitboxPosition),
-            player.hitboxRadius, 
-            bullet.position, 
-            bulletMetaData.hitboxRadius
-        );
+        if (bullet.isFriendly) {
+            // Check collision with enemy...
 
-        if (collision) {
-            player.takeDamage();
+
+        } else {
+            EventPlayerBulletCollision(player, bullet, bulletMetaData);
         }
+
 
         DrawTextureCenterEx(bulletMetaData.texture, bullet.position, 0.0f, 1.0f, WHITE);
     }
