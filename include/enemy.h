@@ -4,11 +4,13 @@
 
 #include <raylib.h>
 #include <common.h>
+#include <bullet.h>
 
 struct Enemy {
     Timer timer = {};
-    Vector2 position;
+    Vector2 position = {0, 0};
     u64 id = 0;
+    u64 hp = 0;
     float timeAlive = 0.0f;
     bool alive;
 };
@@ -20,5 +22,6 @@ struct EnemyMetaData {
 };
 
 u64 RegisterEnemy(EnemyMetaData &RegisteredEnemyData);
-void SpawnEnemy(Vector2 position, u64 enemyId);
+void SpawnEnemy(const Enemy& enemyTemplate);
 void UpdateStateAndDrawEnemies();
+void EventBulletEnemyCollisions(Bullet& bullet, const BulletMetaData& bulletMetaData);

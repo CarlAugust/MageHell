@@ -1,6 +1,7 @@
 #include <common.h>
 #include <assert.h>
 #include <enemy.h>
+#include <bullet.h>
 #include <raylib_extra.h>
 
 #include <vector>
@@ -38,17 +39,41 @@ namespace {
     EnemyBuffer G_EnemyBuffer = {};
 }
 
-void SpawnEnemy(Vector2 position, u64 enemyId) {
+void SpawnEnemy(const Enemy& enemyTemplate) {
     u64 curr = G_EnemyBuffer.curr;
     Enemy &enemy = G_EnemyBuffer.buffer[curr];
-    enemy = Enemy{};
+
+    enemy = enemyTemplate;
     enemy.alive = true;
 
     G_EnemyBuffer.curr++;
     if (G_EnemyBuffer.curr == G_EnemyBuffer.cap) G_EnemyBuffer.curr = 1;
 };
 
+void EventBulletEnemyCollisions(Bullet& bullet, const BulletMetaData& bulletMetaData) {
+    for (Enemy& enemy : G_EnemyBuffer.buffer ) {
+        if (enemy.alive == false) continue;
 
+        const EnemyMetaData& enemyMetaData = GetEnemyMetaData(enemy.id);
+        bool collision = CheckCollisionCircles(
+            bullet.position,
+            bulletMetaData.hitboxRadius, 
+            enemy.position,
+            enemyMetaData.hitboxRadius 
+        );
+
+        if (collision) {
+            bullet.active = false;
+            enemy.hp--;
+
+            // Some event should happen when an enemy dies or something.
+            if (enemy.hp <= 0) {
+                enemy.alive = false;
+            }
+            return;
+        }
+    }
+}
 
 void UpdateStateAndDrawEnemies() {
     

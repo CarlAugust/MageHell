@@ -5,6 +5,7 @@
 #include <bullet.h>
 #include <assert.h>
 #include <stdio.h>
+#include <enemy.h>
 
 #include <array>
 #include <vector>
@@ -90,7 +91,7 @@ void UpdateStateAndDrawBullets() {
 
         if (bullet.isFriendly) {
             // Check collision with enemy...
-
+            EventBulletEnemyCollisions(bullet, bulletMetaData);
 
         } else {
             EventPlayerBulletCollision(player, bullet, bulletMetaData);
